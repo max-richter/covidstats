@@ -1,11 +1,11 @@
 import * as React from 'react';
-import NavHeader from './NavHeader';
+import HomePage from './HomePage';
 
 class FeedPage extends React.Component {
     render() {
         return (
             <>
-            <NavHeader />
+            <HomePage />
             <h1>This is the feed page!</h1>
             </>
         );

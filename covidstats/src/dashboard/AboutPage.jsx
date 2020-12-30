@@ -1,11 +1,11 @@
 import * as React from 'react';
-import NavHeader from './NavHeader';
+import HomePage from './HomePage';
 
 class AboutPage extends React.Component {
     render() {
         return (
             <>
-            <NavHeader />
+            <HomePage />
             <h1>This is the about page!</h1>
             </>
         );

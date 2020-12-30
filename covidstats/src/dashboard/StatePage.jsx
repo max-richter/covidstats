@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NavHeader from './NavHeader';
+import NavHeader from './HomePage';
 
 class StatePage extends React.Component {
     render() {
