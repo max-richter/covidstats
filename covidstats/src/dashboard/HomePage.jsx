@@ -19,6 +19,16 @@ import '/Users/max/Desktop/covidstats/covidstats/src/c3.css';
 
 class HomePage extends React.Component {
     render() {
+
+        // get dates (with yesterday included)
+        let date = new Date();
+        let day = date.getDate();
+        let year = date.getFullYear();
+        let months = ["January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"];
+        let currMonth = months[date.getMonth()];
+        let yesterday = date.getDate() - 1;
+
         return (
             <div>
                 <NavHeader />
@@ -176,31 +186,31 @@ class HomePage extends React.Component {
                                     </Table.Header>
                                     <Table.Body>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 30, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {day}, {year}</Table.Col>
                                             <Table.Col>123,654</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 29, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {yesterday}, {year}</Table.Col>
                                             <Table.Col>121,127</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 28, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 1}, {year}</Table.Col>
                                             <Table.Col>121,127</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 27, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 2}, {year}</Table.Col>
                                             <Table.Col>121,127</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 26, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 3}, {year}</Table.Col>
                                             <Table.Col>121,127</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 25, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 4}, {year}</Table.Col>
                                             <Table.Col>121,127</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">December 24, 2020</Table.Col>
+                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 5}, {year}</Table.Col>
                                             <Table.Col>121,127</Table.Col>
                                         </Table.Row>
                                     </Table.Body>
@@ -216,7 +226,7 @@ class HomePage extends React.Component {
                                 >
                                     Check out the project's
                                 </Alert.Link>{" "}
-                                documentation on GitHub
+                                documentation on GitHub.
                             </Alert>
                             <Grid.Row>
                                 <Grid.Col sm={12}>
@@ -226,7 +236,7 @@ class HomePage extends React.Component {
                                         </Card.Header>
                                         <Card.Body>
                                             <C3Chart
-                                                style={{ height: "16rem"}}
+                                                style={{ height: "16rem" }}
                                                 data={{
                                                     columns: [
                                                         ["notInICU", 68],
@@ -256,8 +266,8 @@ class HomePage extends React.Component {
                                             <Card.Title>Hospital Status</Card.Title>
                                         </Card.Header>
                                         <Card.Body>
-                                            <C3Chart 
-                                                style={{height: "16rem"}}
+                                            <C3Chart
+                                                style={{ height: "16rem" }}
                                                 data={{
                                                     columns: [
                                                         ["nonICU", 72],
@@ -276,7 +286,7 @@ class HomePage extends React.Component {
                                                         ventilator: "Ventilator"
                                                     }
                                                 }}
-                                            
+
                                             />
                                         </Card.Body>
 
@@ -285,7 +295,6 @@ class HomePage extends React.Component {
                                 </Grid.Col>
                             </Grid.Row>
                         </Grid.Col>
-
                     </Grid.Row>
                 </Page.Content>
                 <NavFooter />
