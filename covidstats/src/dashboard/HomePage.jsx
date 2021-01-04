@@ -1,4 +1,6 @@
 import * as React from 'react';
+import axios from 'axios';
+import moment from 'moment';
 import {
     Page,
     Grid,
@@ -7,7 +9,8 @@ import {
     colors,
     Table,
     ProgressCard,
-    Alert
+    Alert,
+    Text
 } from 'tabler-react';
 
 import NavHeader from './NavHeader';
@@ -16,18 +19,121 @@ import C3Chart from 'react-c3js';
 import '/Users/max/Desktop/covidstats/covidstats/src/c3.css';
 
 // TODO: research more into fixing imageURL (works for now but with link)
+const domain = 'https://api.covidtracking.com';
+const current = '/v1/us/current.json';
+
+// sets time language to english
+moment().locale('en');
 
 class HomePage extends React.Component {
+
+    state = {
+        newPos: 0,
+        newNeg: 0,
+        newDeaths: 0,
+        totalDeaths: 0,
+        hospitalized: 0,
+        recovered: 0,
+        newHosp: 0,
+        currICU: 0,
+        onVentilator: 0,
+        trendTwo: 0,
+        trendThree: 0,
+        trendFour: 0,
+        trendFive: 0,
+        trendSix: 0,
+        trendSeven: 0,
+        yestPos: 0,
+        yestNeg: 0,
+        yestDeaths: 0,
+        yestHosp: 0,
+        yestRecov: 0,
+        yestTotalDeaths: 0,
+        hasFetched: false
+    }
+
+    componentDidMount() {
+        let data;
+        // get current US values
+        axios.get(domain + current).then(res => {
+            data = res.data;
+            this.setState({
+                newPos: data[0].positiveIncrease,
+                newNeg: data[0].negativeIncrease,
+                newDeaths: data[0].deathIncrease,
+                totalDeaths: data[0].death,
+                hospitalized: data[0].hospitalizedCurrently,
+                recovered: data[0].recovered,
+                newHosp: data[0].hospitalizedIncrease,
+                currICU: data[0].inIcuCurrently,
+                onVentilator: data[0].onVentilatorCurrently
+            })
+        });
+
+        // get historic values
+        let dayTwo = moment().subtract(2, 'days').format("YYYYMMDD").toLocaleString();
+        let dayThree = moment().subtract(3, 'days').format("YYYYMMDD").toLocaleString();
+        let dayFour = moment().subtract(4, 'days').format("YYYYMMDD").toLocaleString();
+        let dayFive = moment().subtract(5, 'days').format("YYYYMMDD").toLocaleString();
+        let daySix = moment().subtract(6, 'days').format("YYYYMMDD").toLocaleString();
+        let daySeven = moment().subtract(7, 'days').format("YYYYMMDD").toLocaleString();
+
+        // last api calls
+        axios.get(domain + '/v1/us/' + dayTwo + '.json').then(res => {
+            this.setState({ 
+                trendTwo: res.data.positiveIncrease,
+                yestPos: res.data.positiveIncrease,
+                yestNeg: res.data.negativeIncrease,
+                yestDeaths: res.data.deathIncrease,
+                yestHosp: res.data.hospitalizedIncrease,
+                yestRecov: res.data.recovered,
+                yestTotalDeaths: res.data.death
+            });
+        });
+        axios.get(domain + '/v1/us/' + dayThree + '.json').then(res => {
+            this.setState({ trendThree: res.data.positiveIncrease });
+        });
+        axios.get(domain + '/v1/us/' + dayFour + '.json').then(res => {
+            this.setState({ trendFour: res.data.positiveIncrease });
+        });
+        axios.get(domain + '/v1/us/' + dayFive + '.json').then(res => {
+            this.setState({ trendFive: res.data.positiveIncrease });
+        });
+        axios.get(domain + '/v1/us/' + daySix + '.json').then(res => {
+            this.setState({ trendSix: res.data.positiveIncrease });
+        });
+        axios.get(domain + '/v1/us/' + daySeven + '.json').then(res => {
+            this.setState({ trendSeven: res.data.positiveIncrease });
+        });
+
+        //setTimeout(() => this.setState({ hasFetched: true }), 5000);
+    }
+
+
+    // shouldComponentUpdate() {
+    //     if (this.state.hasFetched) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
     render() {
 
-        // get dates (with yesterday included)
-        let date = new Date();
-        let day = date.getDate();
-        let year = date.getFullYear();
-        let months = ["January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November", "December"];
-        let currMonth = months[date.getMonth()];
-        let yesterday = date.getDate() - 1;
+        /**
+         * Calculates the percentage increase/decrease for stat cards
+         * @param {*} today 
+         * @param {*} yesterday 
+         */
+        function percentage(today, yesterday) {
+            let temp = Math.round((today / yesterday) * 100);
+            if (temp > 100) {
+                temp = 100 - temp;
+            } else {
+                temp = temp - 100;
+            }
+            return temp;
+        }
+        
 
         return (
             <div>
@@ -35,45 +141,49 @@ class HomePage extends React.Component {
                 <Page.Content title="National Data">
                     <Grid.Row cards={true}>
                         <Grid.Col width={6} sm={4} lg={2}>
-                            <StatsCard layout={1} movement={4} total="50" label="New Positive Cases" />
+                            <StatsCard
+                                layout={1}
+                                movement={percentage(this.state.newPos, this.state.yestPos)}
+                                total={this.state.newPos.toLocaleString()}
+                                label="New Positive Cases" />
                         </Grid.Col>
                         <Grid.Col width={6} sm={4} lg={2}>
                             <StatsCard
                                 layout={1}
-                                movement={-7}
-                                total="98700"
+                                movement={percentage(this.state.newNeg, this.state.yestNeg)}
+                                total={this.state.newNeg.toLocaleString()}
                                 label="New Negative Cases"
                             />
                         </Grid.Col>
                         <Grid.Col width={6} sm={4} lg={2}>
                             <StatsCard
                                 layout={1}
-                                movement={-7}
-                                total="14"
+                                movement={percentage(this.state.newDeaths, this.state.yestDeaths)}
+                                total={this.state.newDeaths.toLocaleString()}
                                 label="New Daily Deaths"
                             />
                         </Grid.Col>
                         <Grid.Col width={6} sm={4} lg={2}>
                             <StatsCard
                                 layout={1}
-                                movement={-7}
-                                total="18"
+                                movement={percentage(this.state.totalDeaths, this.state.yestTotalDeaths)}
+                                total={this.state.totalDeaths.toLocaleString()}
                                 label="Total Deaths"
                             />
                         </Grid.Col>
                         <Grid.Col width={6} sm={4} lg={2}>
                             <StatsCard
                                 layout={1}
-                                movement={-7}
-                                total="148"
+                                movement={percentage(this.state.newHosp, this.state.yestHosp)}
+                                total={this.state.hospitalized.toLocaleString()}
                                 label="Hospitalized"
                             />
                         </Grid.Col>
                         <Grid.Col width={6} sm={4} lg={2}>
                             <StatsCard
                                 layout={1}
-                                movement={-7}
-                                total="48"
+                                movement={percentage(this.state.recovered, this.state.yestRecov)}
+                                total={this.state.recovered.toLocaleString()}
                                 label="Recovered"
                             />
                         </Grid.Col>
@@ -81,7 +191,7 @@ class HomePage extends React.Component {
                         <Grid.Col sm={4}>
                             <ProgressCard
                                 header="Newly Hospitalized"
-                                content="5,152"
+                                content={this.state.newHosp.toLocaleString()}
                                 progressWidth={100}
                                 progressColor="blue"
 
@@ -90,7 +200,7 @@ class HomePage extends React.Component {
                         <Grid.Col sm={4}>
                             <ProgressCard
                                 header="Currently in ICU"
-                                content="22,838"
+                                content={this.state.currICU.toLocaleString()}
                                 progressColor="purple"
                                 progressWidth={100}
                             />
@@ -98,7 +208,7 @@ class HomePage extends React.Component {
                         <Grid.Col sm={4}>
                             <ProgressCard
                                 header="Patients on Ventilators"
-                                content="7,885"
+                                content={this.state.onVentilator.toLocaleString()}
                                 progressColor="red"
                                 progressWidth={100}
                             />
@@ -115,13 +225,13 @@ class HomePage extends React.Component {
                                         columns: [
                                             [
                                                 "cases",
-                                                345,
-                                                213,
-                                                145,
-                                                84,
-                                                130,
-                                                213,
-                                                145,
+                                                this.state.newPos,
+                                                this.state.trendTwo,
+                                                this.state.trendThree,
+                                                this.state.trendFour,
+                                                this.state.trendFive,
+                                                this.state.trendSix,
+                                                this.state.trendSeven,
                                             ],
                                         ],
                                         type: "area",
@@ -186,32 +296,32 @@ class HomePage extends React.Component {
                                     </Table.Header>
                                     <Table.Body>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {day}, {year}</Table.Col>
-                                            <Table.Col>123,654</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.newPos.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {yesterday}, {year}</Table.Col>
-                                            <Table.Col>121,127</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().subtract(1, 'days').format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.trendTwo.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 1}, {year}</Table.Col>
-                                            <Table.Col>121,127</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().subtract(2, 'days').format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.trendThree.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 2}, {year}</Table.Col>
-                                            <Table.Col>121,127</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().subtract(3, 'days').format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.trendFour.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 3}, {year}</Table.Col>
-                                            <Table.Col>121,127</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().subtract(4, 'days').format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.trendFive.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 4}, {year}</Table.Col>
-                                            <Table.Col>121,127</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().subtract(5, 'days').format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.trendSix.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                         <Table.Row>
-                                            <Table.Col className="text-nowrap">{currMonth} {yesterday - 5}, {year}</Table.Col>
-                                            <Table.Col>121,127</Table.Col>
+                                            <Table.Col className="text-nowrap">{moment().subtract(6, 'days').format('LL')}</Table.Col>
+                                            <Table.Col>{this.state.trendSeven.toLocaleString()}</Table.Col>
                                         </Table.Row>
                                     </Table.Body>
                                 </Table>
@@ -232,15 +342,15 @@ class HomePage extends React.Component {
                                 <Grid.Col sm={12}>
                                     <Card>
                                         <Card.Header>
-                                            <Card.Title>ICU Status</Card.Title>
+                                            <Card.Title>ICU Status (% of admitted patients)</Card.Title>
                                         </Card.Header>
                                         <Card.Body>
                                             <C3Chart
                                                 style={{ height: "16rem" }}
                                                 data={{
                                                     columns: [
-                                                        ["notInICU", 68],
-                                                        ["inICU", 32],
+                                                        ["notInICU", percentage(this.state.hospitalized, this.state.currICU)],
+                                                        ["inICU", percentage(this.state.currICU, this.state.hospitalized)],
                                                     ],
                                                     type: "donut",
                                                     colors: {
@@ -248,8 +358,8 @@ class HomePage extends React.Component {
                                                         inICU: colors["red-light"]
                                                     },
                                                     names: {
-                                                        notInICU: "Admitted",
-                                                        inICU: "Not Admitted"
+                                                        notInICU: "non-ICU",
+                                                        inICU: "ICU"
                                                     },
                                                 }}
                                                 padding={{
@@ -263,34 +373,35 @@ class HomePage extends React.Component {
                                 <Grid.Col sm={12}>
                                     <Card>
                                         <Card.Header>
-                                            <Card.Title>Hospital Status</Card.Title>
+                                            <Card.Title>Ventilator Status (% of admitted patients)</Card.Title>
                                         </Card.Header>
                                         <Card.Body>
                                             <C3Chart
                                                 style={{ height: "16rem" }}
                                                 data={{
                                                     columns: [
-                                                        ["nonICU", 72],
-                                                        ["ICU", 6],
-                                                        ["ventilator", 22],
+                                                        ["nonICU", percentage(this.state.hospitalized, this.state.onVentilator)],
+                                                        ["ventilator", percentage(this.state.onVentilator, this.state.hospitalized)],
                                                     ],
                                                     type: "pie",
                                                     colors: {
                                                         nonICU: colors["green-darkest"],
-                                                        ICU: colors["green-darker"],
                                                         ventilator: colors["green-light"],
                                                     },
                                                     names: {
-                                                        nonICU: "Admitted",
-                                                        ICU: "ICU",
+                                                        nonICU: "non-Ventilator",
                                                         ventilator: "Ventilator"
                                                     }
                                                 }}
-
                                             />
                                         </Card.Body>
-
-
+                                        <Card.Footer>
+                                            <Text.Small>
+                                                Note: Every state has a different way of reporting this statistic.
+                                                Use this graph as an approximate visual representation of the percentage of
+                                                patients who are admitted to the hospital and currently on a ventilator.
+                                            </Text.Small>
+                                        </Card.Footer>
                                     </Card>
                                 </Grid.Col>
                             </Grid.Row>
