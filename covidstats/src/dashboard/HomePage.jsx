@@ -25,6 +25,16 @@ const current = '/v1/us/current.json';
 // sets time language to english
 moment().locale('en');
 
+// get historic values
+let dayTwo = moment().subtract(2, 'days').format("YYYYMMDD").toLocaleString();
+let dayThree = moment().subtract(3, 'days').format("YYYYMMDD").toLocaleString();
+let dayFour = moment().subtract(4, 'days').format("YYYYMMDD").toLocaleString();
+let dayFive = moment().subtract(5, 'days').format("YYYYMMDD").toLocaleString();
+let daySix = moment().subtract(6, 'days').format("YYYYMMDD").toLocaleString();
+let daySeven = moment().subtract(7, 'days').format("YYYYMMDD").toLocaleString();
+
+// TODO remove recovered data point, deprecated
+
 class HomePage extends React.Component {
 
     state = {
@@ -47,12 +57,13 @@ class HomePage extends React.Component {
         yestNeg: 0,
         yestDeaths: 0,
         yestHosp: 0,
-        yestRecov: 0,
         yestTotalDeaths: 0,
-        hasFetched: false
+        loadingCount: 0,
+        pendConf: 0,
+        yestConf: 0
     }
 
-    componentDidMount() {
+    getData() {
         let data;
         // get current US values
         axios.get(domain + current).then(res => {
@@ -63,31 +74,23 @@ class HomePage extends React.Component {
                 newDeaths: data[0].deathIncrease,
                 totalDeaths: data[0].death,
                 hospitalized: data[0].hospitalizedCurrently,
-                recovered: data[0].recovered,
                 newHosp: data[0].hospitalizedIncrease,
                 currICU: data[0].inIcuCurrently,
-                onVentilator: data[0].onVentilatorCurrently
+                onVentilator: data[0].onVentilatorCurrently,
+                pendConf: data[0].pending
             })
         });
 
-        // get historic values
-        let dayTwo = moment().subtract(2, 'days').format("YYYYMMDD").toLocaleString();
-        let dayThree = moment().subtract(3, 'days').format("YYYYMMDD").toLocaleString();
-        let dayFour = moment().subtract(4, 'days').format("YYYYMMDD").toLocaleString();
-        let dayFive = moment().subtract(5, 'days').format("YYYYMMDD").toLocaleString();
-        let daySix = moment().subtract(6, 'days').format("YYYYMMDD").toLocaleString();
-        let daySeven = moment().subtract(7, 'days').format("YYYYMMDD").toLocaleString();
-
         // last api calls
         axios.get(domain + '/v1/us/' + dayTwo + '.json').then(res => {
-            this.setState({ 
+            this.setState({
                 trendTwo: res.data.positiveIncrease,
                 yestPos: res.data.positiveIncrease,
                 yestNeg: res.data.negativeIncrease,
                 yestDeaths: res.data.deathIncrease,
                 yestHosp: res.data.hospitalizedIncrease,
-                yestRecov: res.data.recovered,
-                yestTotalDeaths: res.data.death
+                yestTotalDeaths: res.data.death,
+                yestConf: res.data.pending
             });
         });
         axios.get(domain + '/v1/us/' + dayThree + '.json').then(res => {
@@ -105,17 +108,17 @@ class HomePage extends React.Component {
         axios.get(domain + '/v1/us/' + daySeven + '.json').then(res => {
             this.setState({ trendSeven: res.data.positiveIncrease });
         });
-
-        //setTimeout(() => this.setState({ hasFetched: true }), 5000);
+        console.log("called");
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.loadingCount !== nextState.value;
+    }
 
-    // shouldComponentUpdate() {
-    //     if (this.state.hasFetched) {
-    //         return false;
-    //     }
-    //     return true;
-    // }
+    componentDidMount() {
+        this.getData();
+    }
+
 
     render() {
 
@@ -133,7 +136,6 @@ class HomePage extends React.Component {
             }
             return temp;
         }
-        
 
         return (
             <div>
@@ -182,12 +184,11 @@ class HomePage extends React.Component {
                         <Grid.Col width={6} sm={4} lg={2}>
                             <StatsCard
                                 layout={1}
-                                movement={percentage(this.state.recovered, this.state.yestRecov)}
-                                total={this.state.recovered.toLocaleString()}
-                                label="Recovered"
+                                movement={percentage(this.state.pendConf, this.state.yestConf)}
+                                total={this.state.pendConf.toLocaleString()}
+                                label="Pending Pos. Cases"
                             />
                         </Grid.Col>
-
                         <Grid.Col sm={4}>
                             <ProgressCard
                                 header="Newly Hospitalized"

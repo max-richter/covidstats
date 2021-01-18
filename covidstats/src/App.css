@@ -7,6 +7,21 @@
   pointer-events: none;
 }
 
+#footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.dropdown {
+  padding-bottom: 2rem;
+}
+
+.dropdown-menu {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
