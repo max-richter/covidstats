@@ -195,7 +195,6 @@ class HomePage extends React.Component {
                                 content={this.state.newHosp.toLocaleString()}
                                 progressWidth={100}
                                 progressColor="blue"
-
                             />
                         </Grid.Col>
                         <Grid.Col sm={4}>
@@ -386,8 +385,8 @@ class HomePage extends React.Component {
                                                     ],
                                                     type: "pie",
                                                     colors: {
-                                                        nonICU: colors["green-darkest"],
-                                                        ventilator: colors["green-light"],
+                                                        nonICU: colors["blue-dark"],
+                                                        ventilator: colors["blue-light"],
                                                     },
                                                     names: {
                                                         nonICU: "non-Ventilator",

@@ -16,11 +16,9 @@ import {
     Table,
     ProgressCard,
     Alert,
-    Header,
-    Button
+    Header
 } from 'tabler-react';
 import '/Users/max/Desktop/covidstats/covidstats/src/c3.css';
-import BootButton from 'react-bootstrap/esm/Button';
 
 const domain = 'https://api.covidtracking.com';
 const states = stateData;
@@ -118,7 +116,7 @@ class StatePage extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.updated == 0) {
+        if (this.state.updated === 0) {
             this.getData();
             this.setState({updated: 1});
         }
