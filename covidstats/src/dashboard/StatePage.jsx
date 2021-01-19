@@ -14,9 +14,13 @@ import {
     Card,
     colors,
     Table,
-    ProgressCard
+    ProgressCard,
+    Alert,
+    Header,
+    Button
 } from 'tabler-react';
 import '/Users/max/Desktop/covidstats/covidstats/src/c3.css';
+import BootButton from 'react-bootstrap/esm/Button';
 
 const domain = 'https://api.covidtracking.com';
 const states = stateData;
@@ -150,6 +154,17 @@ class StatePage extends React.Component {
         return (
             <>
                 <NavHeader />
+
+                <Alert type="primary" isDismissible>
+                    <Header.H4>READ: Data Inconsistencies</Header.H4>
+                    <p>
+                        Due to how states report their data, there are many inconsistencies in regard to
+                        some states not reporting the same categories of data. Unfortunately, there is no
+                        way tell if states don't report the data listed below. Some states will report a
+                        category of data one week and deprecate it the next.
+                    </p>
+                </Alert>
+
                 <Page.Content title="Statewide Data">
                     <p>Select a State:</p>
                     <DropdownButton
