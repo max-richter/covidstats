@@ -8,7 +8,6 @@ import Error404 from "../error_pages/Error404";
 import Error500 from "../error_pages/Error500";
 import HomePage from './HomePage';
 import StatePage from './StatePage';
-import FeedPage from './FeedPage';
 import AboutPage from './AboutPage';
 
 
@@ -20,7 +19,6 @@ class PageRouter extends React.Component {
                     <Switch>
                         <Route exact path="/" component={HomePage} />
                         <Route exact path="/state" component={StatePage} />
-                        <Route exact path="/feed" component={FeedPage} />
                         <Route exact path="/about" component={AboutPage} />
                         <Route exact path="/400" component={Error400} />
                         <Route exact path="/401" component={Error401} />

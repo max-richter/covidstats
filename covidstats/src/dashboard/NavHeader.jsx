@@ -4,6 +4,7 @@ import { Site, Button } from 'tabler-react';
 
 
 class NavHeader extends React.Component {
+    
     render() {
 
         // contains basic info for navbar items
@@ -17,12 +18,6 @@ class NavHeader extends React.Component {
             {
                 value: "State",
                 to: "/state",
-                useExact: true,
-                LinkComponent: withRouter(NavLink)
-            },
-            {
-                value: "Feed",
-                to: "/feed",
                 useExact: true,
                 LinkComponent: withRouter(NavLink)
             },
@@ -54,6 +49,7 @@ class NavHeader extends React.Component {
                 />
                 <Site.Nav
                     itemsObjects={navBarItems}
+                    collapse={false}
                 />
             </>
         );
