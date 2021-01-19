@@ -108,7 +108,6 @@ class HomePage extends React.Component {
         axios.get(domain + '/v1/us/' + daySeven + '.json').then(res => {
             this.setState({ trendSeven: res.data.positiveIncrease });
         });
-        console.log("called");
     }
 
     shouldComponentUpdate(nextProps, nextState) {

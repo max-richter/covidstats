@@ -23,6 +23,17 @@ import '/Users/max/Desktop/covidstats/covidstats/src/c3.css';
 const domain = 'https://api.covidtracking.com';
 const states = stateData;
 
+// sets time language to english
+moment().locale('en');
+
+// get historic values
+let dayTwo = moment().subtract(3, 'days').format("YYYYMMDD").toLocaleString();
+let dayThree = moment().subtract(4, 'days').format("YYYYMMDD").toLocaleString();
+let dayFour = moment().subtract(5, 'days').format("YYYYMMDD").toLocaleString();
+let dayFive = moment().subtract(6, 'days').format("YYYYMMDD").toLocaleString();
+let daySix = moment().subtract(7, 'days').format("YYYYMMDD").toLocaleString();
+let daySeven = moment().subtract(8, 'days').format("YYYYMMDD").toLocaleString();
+
 
 class StatePage extends React.Component {
 
@@ -72,14 +83,6 @@ class StatePage extends React.Component {
             })
         });
 
-        // get historic values
-        let dayTwo = moment().subtract(3, 'days').format("YYYYMMDD").toLocaleString();
-        let dayThree = moment().subtract(4, 'days').format("YYYYMMDD").toLocaleString();
-        let dayFour = moment().subtract(5, 'days').format("YYYYMMDD").toLocaleString();
-        let dayFive = moment().subtract(6, 'days').format("YYYYMMDD").toLocaleString();
-        let daySix = moment().subtract(7, 'days').format("YYYYMMDD").toLocaleString();
-        let daySeven = moment().subtract(8, 'days').format("YYYYMMDD").toLocaleString();
-
         // last api calls
         axios.get(domain + '/v1/states/' + this.state.selectedCounty + '/' + dayTwo + '.json').then(res => {
             this.setState({
@@ -92,7 +95,7 @@ class StatePage extends React.Component {
             });
         })
         .catch((error) => {
-            alert("Something went wrong!");
+            alert("ERROR: Looks like this state has issues reporting their data, please try again later.");
         });
         axios.get(domain + '/v1/states/' + this.state.selectedCounty + '/' + dayThree + '.json').then(res => {
             this.setState({
