@@ -17,14 +17,14 @@ class PageRouter extends React.Component {
             <>
                 <Router>
                     <Switch>
-                        <Route exact path="/" component={HomePage} />
-                        <Route exact path="/state" component={StatePage} />
-                        <Route exact path="/about" component={AboutPage} />
-                        <Route exact path="/400" component={Error400} />
-                        <Route exact path="/401" component={Error401} />
-                        <Route exact path="/403" component={Error403} />
-                        <Route exact path="/404" component={Error404} />
-                        <Route exact path="/500" component={Error500} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/" component={HomePage} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/state" component={StatePage} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/about" component={AboutPage} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/400" component={Error400} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/401" component={Error401} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/403" component={Error403} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/404" component={Error404} />
+                        <Route exact basename="/maxrichter.me/covidstats/" path="/500" component={Error500} />
                     </Switch>
                 </Router>
             </>
