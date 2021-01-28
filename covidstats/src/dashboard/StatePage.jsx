@@ -94,9 +94,9 @@ class StatePage extends React.Component {
                 yestTotalDeaths: res.data.death
             });
         })
-        .catch((error) => {
-            alert("ERROR: Looks like this state has issues reporting their data, please try again later.");
-        });
+            .catch((error) => {
+                alert("ERROR: Looks like this state has issues reporting their data, please try again later.");
+            });
         axios.get(domain + '/v1/states/' + this.state.selectedCounty + '/' + dayThree + '.json').then(res => {
             this.setState({
                 trendThree: res.data.positiveIncrease,
@@ -115,13 +115,13 @@ class StatePage extends React.Component {
         axios.get(domain + '/v1/states/' + this.state.selectedCounty + '/' + daySeven + '.json').then(res => {
             this.setState({ trendSeven: res.data.positiveIncrease });
         });
-        this.setState({updated: 1});
+        this.setState({ updated: 1 });
     }
 
     componentDidUpdate() {
         if (this.state.updated === 0) {
             this.getData();
-            this.setState({updated: 1});
+            this.setState({ updated: 1 });
         }
     }
 
@@ -132,7 +132,7 @@ class StatePage extends React.Component {
     onSelectHandler = (eventKey, event) => {
         let temp = event.target.innerHTML;
         this.setState({ selectedCounty: temp });
-        this.setState({updated: 0});
+        this.setState({ updated: 0 });
     }
 
     render() {

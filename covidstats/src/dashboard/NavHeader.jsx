@@ -32,7 +32,7 @@ class NavHeader extends React.Component {
         return (
             <>
                 <Site.Header
-                    imageURL="https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png"
+                    imageURL="https://i.imgur.com/T1s5N9i.png"
                     href="/"
                     alt="COVID Stats"
                     navItems={

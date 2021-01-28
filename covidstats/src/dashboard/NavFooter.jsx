@@ -8,7 +8,7 @@ class NavFooter extends React.Component {
             <footer id="footer">
                 <Site.Footer
                     className="customFooter"
-                    note="A website containing national and statewide COVID-19 statistics"
+                    note="A website containing national and statewide COVID-19 statistics."
                     copyright={
                         <>
                             Copyright © 2020 -
@@ -23,10 +23,7 @@ class NavFooter extends React.Component {
                             <Grid.Col auto={true}>
                                 <List className="list-inline list-inline-dots mb-0">
                                     <List.Item className="list-inline-item">
-                                        <a href=".">About</a>
-                                    </List.Item>
-                                    <List.Item className="list-inline-item">
-                                        <a href=".">FAQ</a>
+                                        <a href="/about">About</a>
                                     </List.Item>
                                 </List>
                             </Grid.Col>
