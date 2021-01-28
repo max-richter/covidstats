@@ -15,7 +15,7 @@ class PageRouter extends React.Component {
     render() {
         return (
             <>
-                <Router basename="/covidstats/">
+                <Router basename="/maxrichter.me/covidstats/">
                     <Switch>
                         <Route exact path="/" component={HomePage} />
                         <Route exact path="/state" component={StatePage} />
