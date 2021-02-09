@@ -23,7 +23,7 @@ class NavFooter extends React.Component {
                             <Grid.Col auto={true}>
                                 <List className="list-inline list-inline-dots mb-0">
                                     <List.Item className="list-inline-item">
-                                        <a href="/about">About</a>
+                                        <a href="/covidstats/about">About</a>
                                     </List.Item>
                                 </List>
                             </Grid.Col>
