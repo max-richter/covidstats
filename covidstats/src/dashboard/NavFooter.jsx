@@ -21,13 +21,6 @@ class NavFooter extends React.Component {
                     nav={
                         <>
                             <Grid.Col auto={true}>
-                                <List className="list-inline list-inline-dots mb-0">
-                                    <List.Item className="list-inline-item">
-                                        <a href="/covidstats/about">About</a>
-                                    </List.Item>
-                                </List>
-                            </Grid.Col>
-                            <Grid.Col auto={true}>
                                 <Button
                                     href="https://github.com/max-richter/covidstats"
                                     target="_blank"
