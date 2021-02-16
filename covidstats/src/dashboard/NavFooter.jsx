@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Site, Grid, List, Button } from 'tabler-react';
+import { Site, Grid, Button } from 'tabler-react';
 
 
 class NavFooter extends React.Component {

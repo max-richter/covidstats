@@ -253,7 +253,7 @@ class StatePage extends React.Component {
                         <Grid.Col sm={4}>
                             <ProgressCard
                                 header="Data Quality Grade"
-                                content={this.state.dataGrade}
+                                content="A"
                                 progressColor="green"
                                 progressWidth={100}
                             />
